@@ -1,8 +1,8 @@
 <?php
 
-namespace trntv\glide_tests;
+namespace shirase55\glide_tests;
 
-use trntv\glide\actions\GlideAction;
+use shirase55\glide\actions\GlideAction;
 use yii\base\Controller;
 use yii\di\Container;
 use yii\helpers\ArrayHelper;
@@ -38,7 +38,7 @@ abstract class TestCase extends \PHPUnit_Framework_TestCase
                     'scriptUrl' => '/index.php'
                 ],
                 'glide' => [
-                    'class' => 'trntv\glide\components\Glide',
+                    'class' => 'shirase55\glide\components\Glide',
                     'sourcePath' => __DIR__ .'/data/source',
                     'cachePath' => __DIR__ .'/data/cache',
                     'signKey' => 'test-key'

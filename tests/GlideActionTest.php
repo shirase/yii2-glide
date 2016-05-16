@@ -1,6 +1,6 @@
 <?php
 
-namespace trntv\glide_tests;
+namespace shirase55\glide_tests;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

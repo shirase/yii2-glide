@@ -21,7 +21,7 @@
     },
     "autoload": {
         "psr-4": {
-            "trntv\\glide\\": "src/"
+            "shirase55\\glide\\": "src/"
         }
     }
 }

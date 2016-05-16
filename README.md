@@ -7,7 +7,7 @@ Before you start read [Glide documentation](http://glide.thephpleague.com/) to u
 
 Demo
 ----
-Since this package was created as a part of [yii2-starter-kit](https://github.com/trntv/yii2-starter-kit) it's demo can be found in starter kit demo.
+Since this package was created as a part of [yii2-starter-kit](https://github.com/shirase55/yii2-starter-kit) it's demo can be found in starter kit demo.
 
 Contibuting
 -----------
@@ -22,13 +22,13 @@ The preferred way to install this extension is through [composer](http://getcomp
 Either run
 
 ```
-php composer.phar require --prefer-dist trntv/yii2-glide "*"
+php composer.phar require --prefer-dist shirase55/yii2-glide "*"
 ```
 
 or add
 
 ```
-"trntv/yii2-glide": "*"
+"shirase55/yii2-glide": "*"
 ```
 
 to the require section of your `composer.json` file.
@@ -43,7 +43,7 @@ Add glide configuration:
 'components' => [
     ...
     'glide' => [
-        'class' => 'trntv\glide\components\Glide',
+        'class' => 'shirase55\glide\components\Glide',
         'sourcePath' => '@app/web/uploads',
         'cachePath' => '@runtime/glide',
         'signKey' => '<random-key>' // "false" if you do not want to use HTTP signatures
@@ -57,13 +57,13 @@ Then you can output modified image like so:
 Yii::$app->glide->outputImage('new-upload.jpg', ['w' => 100, 'fit' => 'crop'])
 ```
 
-You can also use ``trntv\glide\actions\GlideAction`` to output images:
+You can also use ``shirase55\glide\actions\GlideAction`` to output images:
 In any controller add (``SiteController`` for example):
 ```php
 public function actions()
 {
     return [
-        'glide' => 'trntv\glide\actions\GlideAction'
+        'glide' => 'shirase55\glide\actions\GlideAction'
     ]
 }
 ```
@@ -72,7 +72,7 @@ Than use it:
 
 Example
 -------
-Complex Glide integration example can be found [here](https://github.com/trntv/yii2-starter-kit/tree/master/storage)
+Complex Glide integration example can be found [here](https://github.com/shirase55/yii2-starter-kit/tree/master/storage)
 
 
 

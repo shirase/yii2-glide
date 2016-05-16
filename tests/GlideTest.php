@@ -1,6 +1,6 @@
 <?php
 
-namespace trntv\glide_tests;
+namespace shirase55\glide_tests;
 
 /**
  * @author Eugene Terentev <eugene@terentev.net>
@@ -33,7 +33,7 @@ class GlideTest extends TestCase
 
 
     /**
-     * @return \trntv\glide\components\Glide;
+     * @return \shirase55\glide\components\Glide;
      */
     protected function getGlide()
     {

@@ -1,5 +1,5 @@
 <?php
-namespace trntv\glide\components;
+namespace shirase55\glide\components;
 
 use Yii;
 use Intervention\Image\ImageManager;
