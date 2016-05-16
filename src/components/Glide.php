@@ -22,19 +22,20 @@ use League\Glide\Http\SignatureException;
 use League\Glide\Http\SignatureFactory;
 use League\Glide\Http\UrlBuilder;
 use League\Glide\Http\UrlBuilderFactory;
-use League\Glide\Server;
+use shirase55\glide\components\Server;
 use League\Uri\Components\Query;
 use League\Uri\Schemes\Http;
 use Symfony\Component\HttpFoundation\Request;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
 
 /**
  * @author Eugene Terentev <eugene@terentev.net>
  * @param $source \League\Flysystem\FilesystemInterface
  * @param $cache \League\Flysystem\FilesystemInterface
- * @param $server \League\Glide\Server
+ * @param $server \shirase55\glide\components\Server
  * @param $httpSignature \League\Glide\Http\Signature
  * @param $urlBuilder \League\Glide\Http\UrlBuilderFactory
  */
@@ -247,6 +248,11 @@ class Glide extends Component
      */
     public function createSignedUrl(array $params, $scheme = false)
     {
+        if (!isset($params[0])) $params[0] = '/glide/index';
+
+        asort($params);
+        $params['params'] = md5(Json::encode($params));
+
         $route = ArrayHelper::getValue($params, 0);
         if ($this->getUrlManager()->enablePrettyUrl) {
             $showScriptName = $this->getUrlManager()->showScriptName;
@@ -271,9 +277,7 @@ class Glide extends Component
         }
 
         $params[0] = $route;
-        return $scheme
-            ? $this->getUrlManager()->createAbsoluteUrl($params, $scheme)
-            : $this->getUrlManager()->createUrl($params);
+        return $this->getUrlManager()->createAbsoluteUrl($params, $scheme);
     }
 
     /**
@@ -302,7 +306,7 @@ class Glide extends Component
      */
     public function signPath($path, array $params = [])
     {
-        $this->getUrlBuilder()->getUrl($path, $params);
+        return $this->getUrlBuilder()->getUrl($path, $params);
     }
 
     /**
