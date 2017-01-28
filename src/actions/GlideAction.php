@@ -5,6 +5,7 @@ namespace shirase55\glide\actions;
 use Symfony\Component\HttpFoundation\Request;
 use Yii;
 use yii\base\Action;
+use yii\web\Response;
 use yii\base\NotSupportedException;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
@@ -39,6 +40,7 @@ class GlideAction extends Action
         }
 
         try {
+            Yii::$app->getResponse()->format = Response::FORMAT_RAW;
             $this->getServer()->outputImage($path, Yii::$app->request->get());
         } catch (\Exception $e) {
             throw new NotSupportedException($e->getMessage());
@@ -62,10 +64,10 @@ class GlideAction extends Action
     }
 
     /**
-     * @param $request
+     * @param Request $request
      * @return bool
      */
-    public function validateRequest($request)
+    public function validateRequest(Request $request)
     {
         return $this->getComponent()->validateRequest($request);
     }
