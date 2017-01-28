@@ -1,29 +1,44 @@
 <?php
 namespace shirase55\glide\components;
 
-use League\Glide\Http\RequestArgumentsResolver;
-
 class Server extends \League\Glide\Server {
 
     /**
-     * Get the cache path.
-     * @param  mixed
-     * @return string The cache path.
+     * Get cache path.
+     * @param  string $path   Image path.
+     * @param  array  $params Image manipulation params.
+     * @return string Cache path.
      */
-    public function getCachePath()
+    public function getCachePath($path, array $params = [])
     {
-        $request = (new RequestArgumentsResolver())->getRequest(func_get_args());
+        $sourcePath = $this->getSourcePath($path);
 
-        if ($params = $request->query->get('params')) {
-            $path = $params.'/'.$this->getSourcePath($request);
-        } else {
-            $path = md5($this->getSourcePath($request).'?'.http_build_query($request->query->all()));
+        if ($this->sourcePathPrefix) {
+            $sourcePath = substr($sourcePath, strlen($this->sourcePathPrefix) + 1);
         }
+
+        $params = $this->getAllParams($params);
+        unset($params['s'], $params['p']);
+        ksort($params);
+
+        if (isset($params['params'])) {
+            $cachedPath = $params['params'].'/'.$sourcePath;
+        } else {
+            $cachedPath = md5($sourcePath.'?'.http_build_query($params));
+        }
+
+        /*$md5 = md5($sourcePath.'?'.http_build_query($params));
+
+        $cachedPath = $this->groupCacheInFolders ? $sourcePath.'/'.$md5 : $md5;*/
 
         if ($this->cachePathPrefix) {
-            $path = $this->cachePathPrefix.'/'.$path;
+            $cachedPath = $this->cachePathPrefix.'/'.$cachedPath;
         }
 
-        return $path;
+        if ($this->cacheWithFileExtensions) {
+            $cachedPath .= '.'.(isset($params['fm']) ? $params['fm'] : pathinfo($path)['extension']);
+        }
+
+        return $cachedPath;
     }
 } 
