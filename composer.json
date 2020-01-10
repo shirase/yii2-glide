@@ -10,6 +10,9 @@
             "email": "eugene@terentev.net"
         }
     ],
+    "replace": {
+        "trntv/yii2-glide": "*"
+    },
     "require": {
         "php" : ">=5.5.9",
         "yiisoft/yii2": "^2.0.0",
@@ -22,7 +25,7 @@
     },
     "autoload": {
         "psr-4": {
-            "shirase55\\glide\\": "src/"
+            "trntv\\glide\\": "src/"
         }
     }
 }

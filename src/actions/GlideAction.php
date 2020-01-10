@@ -1,6 +1,6 @@
 <?php
 
-namespace shirase55\glide\actions;
+namespace trntv\glide\actions;
 
 use Symfony\Component\HttpFoundation\Request;
 use Yii;
@@ -56,7 +56,7 @@ class GlideAction extends Action
     }
 
     /**
-     * @return \shirase55\glide\components\Glide;
+     * @return \trntv\glide\components\Glide;
      */
     public function getComponent()
     {

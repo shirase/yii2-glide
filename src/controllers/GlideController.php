@@ -1,13 +1,13 @@
 <?php
 
-namespace shirase55\glide\controllers;
+namespace trntv\glide\controllers;
 
 use yii\web\Controller;
 
 /**
  * @author Eugene Terentev <eugene@terentev.net>
  * With this controller you can create a simple
- * configurations like that @see https://github.com/shirase55/yii2-starter-kit/blob/master/storage/index.php
+ * configurations like that @see https://github.com/trntv/yii2-starter-kit/blob/master/storage/index.php
  */
 class GlideController extends Controller
 {
@@ -15,7 +15,7 @@ class GlideController extends Controller
     {
         return [
             'index' => [
-                'class' => 'shirase55\glide\actions\GlideAction'
+                'class' => 'trntv\glide\actions\GlideAction'
             ]
         ];
     }

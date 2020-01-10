@@ -1,6 +1,6 @@
 <?php
 
-namespace shirase55\glide_tests;
+namespace trntv\glide_tests;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -47,7 +47,7 @@ class GlideTest extends TestCase
 
 
     /**
-     * @return \shirase55\glide\components\Glide;
+     * @return \trntv\glide\components\Glide;
      */
     protected function getGlide()
     {

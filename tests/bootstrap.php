@@ -11,4 +11,4 @@ $_SERVER['SERVER_NAME'] = 'glide.test';
 require_once(__DIR__ . '/../vendor/autoload.php');
 require_once(__DIR__ . '/../vendor/yiisoft/yii2/Yii.php');
 
-Yii::setAlias('@shirase55/glide_tests', __DIR__);
+Yii::setAlias('@trntv/glide_tests', __DIR__);
