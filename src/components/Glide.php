@@ -1,6 +1,9 @@
 <?php
 namespace trntv\glide\components;
 
+use League\Uri\Http;
+use League\Uri\QueryParser;
+use League\Uri\Uri;
 use Yii;
 use Intervention\Image\ImageManager;
 use League\Flysystem\Adapter\Local;
@@ -12,6 +15,7 @@ use League\Glide\Manipulators\Brightness;
 use League\Glide\Manipulators\Contrast;
 use League\Glide\Manipulators\Crop;
 use League\Glide\Manipulators\Filter;
+use League\Glide\Manipulators\Flip;
 use League\Glide\Manipulators\Gamma;
 use League\Glide\Manipulators\Orientation;
 use League\Glide\Manipulators\Pixelate;
@@ -27,7 +31,6 @@ use League\Glide\Urls\UrlBuilder;
 use League\Glide\Urls\UrlBuilderFactory;
 use shirase55\glide\components\Server;
 use League\Uri\Components\Query;
-use League\Uri\Schemes\Http;
 use Symfony\Component\HttpFoundation\Request;
 use yii\base\Component;
 use yii\base\InvalidConfigException;
@@ -152,6 +155,20 @@ class Glide extends Component
         $this->getServer()->outputImage($path, $params);
     }
 
+
+    /**
+     * Generate manipulated image.
+     * @param  string $path Image path.
+     * @param  array $params Image manipulation params.
+     * @return string                Cache path.
+     * @throws \League\Glide\Filesystem\FileNotFoundException
+     * @throws \League\Glide\Filesystem\FilesystemException
+     */
+    public function makeImage($path, $params = [])
+    {
+       return $this->getServer()->makeImage($path, $params);
+    }
+
     /**
      * Get configured server.
      * @return Server
@@ -242,14 +259,15 @@ class Glide extends Component
             'driver' => extension_loaded('imagick') ? 'imagick' : 'gd'
         ]);
         $manipulators = [
-            new Size($this->maxImageSize),
             new Orientation(),
             new Crop(),
+            new Size($this->maxImageSize),
             new Brightness(),
             new Contrast(),
             new Gamma(),
             new Sharpen(),
             new Filter(),
+            new Flip(),
             new Blur(),
             new Pixelate(),
             new Background(),
@@ -302,7 +320,7 @@ class Glide extends Component
             $this->getUrlManager()->showScriptName = $showScriptName;
             $uri = Http::createFromString($resultUrl);
             $path = $uri->getPath();
-            $urlParams = $uri->query->toArray();
+            $urlParams = (array) (new QueryParser)->parse($uri->getQuery());
         } else {
             $path = '/index.php';
             $route = array_shift($params);
@@ -354,13 +372,11 @@ class Glide extends Component
      */
     public function signUrl($url, array $params = [])
     {
-        $uri = Http::createFromString($url);
-        $paramsQuery = Query::createFromArray($params);
-        $path = $uri->getPath();
-        $query = $uri->query->merge($paramsQuery);
-        $signature = $this->getHttpSignature()->generateSignature($path, $query->toArray());
-        $query = $query->merge(Query::createFromArray(['s' => $signature]));
-        $uri = $uri->withQuery((string) $query);
+        $uri = Uri::createFromString($url);
+        $query = \array_merge($params, (new QueryParser)->parse($uri->getQuery()));
+        $signature = $this->getHttpSignature()->generateSignature($uri->getPath(), $query);
+        $query['s'] = $signature;
+        $uri = $uri->withQuery((string) Query::createFromParams($query));
         return (string) $uri;
     }
 

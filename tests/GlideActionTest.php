@@ -8,21 +8,17 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class GlideActionTest extends TestCase
 {
-    /**
-     * @runInSeparateProcess
-     */
     public function testImageFound()
     {
         \Yii::$app->glide->signKey = null;
-        ob_start();
-        $this->getGlideAction()->run('kayaks.jpg');
-        ob_end_clean();
+        $response = $this->getGlideAction()->run('kayaks.jpg');
+        $this->assertEquals($response->getStatusCode(), 200);
     }
 
     public function testImageNotFound()
     {
         \Yii::$app->glide->signKey = null;
-        $this->setExpectedException('\yii\web\NotFoundHttpException');
+        $this->expectException('\yii\web\NotFoundHttpException');
         $this->getGlideAction()->run('wrong-image.jpg');
     }
 

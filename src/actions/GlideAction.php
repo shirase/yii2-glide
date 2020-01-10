@@ -22,14 +22,23 @@ class GlideAction extends Action
 
     /**
      * @param $path
+     * @return Response
      * @throws BadRequestHttpException
      * @throws NotFoundHttpException
      * @throws NotSupportedException
+     * @throws \League\Flysystem\FileNotFoundException
+     * @throws \yii\base\InvalidConfigException
      */
     public function run($path)
     {
-        if (!$this->getServer()->sourceFileExists($path)) {
+        $server = $this->getServer();
+
+        if (!$server->sourceFileExists($path)) {
             throw new NotFoundHttpException;
+        }
+
+        if ($server->cacheFileExists($path, []) && $server->getSource()->getTimestamp($path) >= $server->getCache()->getTimestamp($path)) {
+            $server->deleteCache($path);
         }
 
         if ($this->getComponent()->signKey) {
@@ -40,8 +49,17 @@ class GlideAction extends Action
         }
 
         try {
-            Yii::$app->getResponse()->format = Response::FORMAT_RAW;
-            $this->getServer()->outputImage($path, Yii::$app->request->get());
+            $response = Yii::$app->response;
+            $response->format = Response::FORMAT_RAW;
+            $path = $server->makeImage($path, Yii::$app->request->get());
+            $response->headers->add('Content-Type', $server->getCache()->getMimetype($path));
+            $response->headers->add('Content-Length', $server->getCache()->getSize($path));
+            $response->headers->add('Cache-Control', 'max-age=31536000, public');
+            $response->headers->add('Expires', (new \DateTime('UTC + 1 year'))->format('D, d M Y H:i:s \G\M\T'));
+
+            $response->stream = $server->getCache()->readStream($path);
+
+            return $response;
         } catch (\Exception $e) {
             throw new NotSupportedException($e->getMessage());
         }
@@ -49,6 +67,7 @@ class GlideAction extends Action
 
     /**
      * @return \League\Glide\Server
+     * @throws \yii\base\InvalidConfigException
      */
     protected function getServer()
     {
@@ -57,6 +76,7 @@ class GlideAction extends Action
 
     /**
      * @return \trntv\glide\components\Glide;
+     * @throws \yii\base\InvalidConfigException
      */
     public function getComponent()
     {
@@ -66,6 +86,7 @@ class GlideAction extends Action
     /**
      * @param Request $request
      * @return bool
+     * @throws \yii\base\InvalidConfigException
      */
     public function validateRequest(Request $request)
     {
