@@ -1,5 +1,5 @@
 <?php
-namespace shirase55\glide\components;
+namespace trntv\glide\components;
 
 class Server extends \League\Glide\Server {
 
@@ -41,4 +41,4 @@ class Server extends \League\Glide\Server {
 
         return $cachedPath;
     }
-} 
+}

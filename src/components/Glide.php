@@ -1,7 +1,7 @@
 <?php
 namespace trntv\glide\components;
 
-use League\Uri\Http;
+use League\Uri\Schemes\Http;
 use League\Uri\QueryParser;
 use League\Uri\Uri;
 use Yii;
@@ -29,7 +29,7 @@ use League\Glide\Signatures\SignatureException;
 use League\Glide\Signatures\SignatureFactory;
 use League\Glide\Urls\UrlBuilder;
 use League\Glide\Urls\UrlBuilderFactory;
-use shirase55\glide\components\Server;
+use trntv\glide\components\Server;
 use League\Uri\Components\Query;
 use Symfony\Component\HttpFoundation\Request;
 use yii\base\Component;
@@ -42,7 +42,7 @@ use yii\helpers\Json;
  * @author Eugene Terentev <eugene@terentev.net>
  * @param $source \League\Flysystem\FilesystemInterface
  * @param $cache \League\Flysystem\FilesystemInterface
- * @param $server \shirase55\glide\components\Server
+ * @param $server \trntv\glide\components\Server
  * @param $httpSignature \League\Glide\Signatures\Signature
  * @param $urlBuilder \League\Glide\Urls\UrlBuilderFactory
  */
